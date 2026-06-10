@@ -38,6 +38,82 @@ These `.debdiff` files are designed to be applied to a local Mesa build environm
 * **License:** Packaging work is licensed under GPLv3. Upstream Mesa source code remains under its original licenses (MIT/X11).
 
 ---
+## ⚠️ Test Packages (.deb)
+
+The packages in the "Releases" section are binaries compiled solely for testing purposes. They include everything necessary to run on Debian stable, but **are not officially signed** by Debian Backports.
+
+⛔ Do not install them on production systems without verifying their integrity using the SHA256 checksums provided in GitHub releases.
+
+### Installation Guide (Quick Start)
+1. Download the file from [Releases](https://github.com/stornic56/mesa-debian/releases/v25.3.3)
+2. Extract: `tar -xzf mesa_25.3.3_test_packages.tar.gz`
+
+---
+
+### Option 1: Install AMD64 Only
+This is the safer option and recommended for most users on modern hardware with AMD or Intel GPUs. It excludes OpenCL i386 packages which may cause conflicts in Debian Trixie.
+
+```bash
+sudo dpkg -i --force-overwrite \
+    mesa-libgallium_25.3.3-1~bpo13+1_amd64.deb \
+    libgbm1_25.3.3-1~bpo13+1_amd64.deb \
+    libgl1-mesa-dri_25.3.3-1~bpo13+1_amd64.deb \
+    libglx-mesa0_25.3.3-1~bpo13+1_amd64.deb \
+    libegl-mesa0_25.3.3-1~bpo13+1_amd64.deb \
+    mesa-vulkan-drivers_25.3.3-1~bpo13+1_amd64.deb \
+    mesa-drm-shim_25.3.3-1~bpo13+1_amd64.deb
+
+# Fix dependencies:
+sudo apt install -f
+```
+
+---
+
+### Option 2: Install Full (AMD64 + i386 recommended for Gaming)
+This option includes all packages including i386 versions for compatibility testing and gaming scenarios that require 32-bit libraries. **Use with caution** as some OpenCL i386 packages may cause conflicts in Debian Trixie.
+
+```bash
+sudo dpkg -i --force-overwrite \
+    mesa-libgallium_25.3.3-1~bpo13+1_amd64.deb \
+    mesa-libgallium_25.3.3-1~bpo13+1_i386.deb \
+    libgbm1_25.3.3-1~bpo13+1_amd64.deb \
+    libgbm1_25.3.3-1~bpo13+1_i386.deb \
+    libgl1-mesa-dri_25.3.3-1~bpo13+1_amd64.deb \
+    libgl1-mesa-dri_25.3.3-1~bpo13+1_i386.deb \
+    libglx-mesa0_25.3.3-1~bpo13+1_amd64.deb \
+    libglx-mesa0_25.3.3-1~bpo13+1_i386.deb \
+    libegl-mesa0_25.3.3-1~bpo13+1_amd64.deb \
+    libegl-mesa0_25.3.3-1~bpo13+1_i386.deb \
+    mesa-vulkan-drivers_25.3.3-1~bpo13+1_amd64.deb \
+    mesa-vulkan-drivers_25.3.3-1~bpo13+1_i386.deb \
+    mesa-drm-shim_25.3.3-1~bpo13+1_amd64.deb \
+    mesa-drm-shim_25.3.3-1~bpo13+1_i386.deb
+
+# Fix dependencies:
+sudo apt install -f
+```
+
+---
+
+### Optional: Install OpenCL (Rusticl) for AMD64 Only
+If you want to test the 64-bit OpenCL driver on compatible hardware, install it separately after the main packages:
+
+```bash
+sudo dpkg -i mesa-opencl-icd_25.3.3-1~bpo13+1_amd64.deb
+```
+
+---
+
+### ⚠️ Important Notes
+| Aspect | Details |
+| :--- | :--- |
+| **Production Use** | These packages are for testing only. Verify with SHA256 checksums before using on production systems. |
+| **32-bit Packages** | The archive includes both `amd64` (recommended) and `i386` packages. Some i386 OpenCL packages may cause conflicts in Debian Trixie. |
+| **Verification** | Use `sha256sum -c SHA256SUMS.txt` to verify package integrity after extraction. |
+| **Architecture** | Most modern GPUs on Debian Trixie should work correctly with AMD64 packages only. i386 is optional for legacy compatibility. |
+
+
+---
 
 ## License
 
